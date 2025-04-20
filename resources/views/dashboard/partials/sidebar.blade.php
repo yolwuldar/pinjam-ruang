@@ -100,7 +100,7 @@
                 <path d="M12 22.08V12" stroke="#ABB3C4" stroke-width="2" stroke-linecap="round"
                     stroke-linejoin="round" />
             </svg>
-            <span>Daftar Peminjaman <br> Sementara</span>
+            <span>Konfirmasi Pinjaman</span>
         </a>
 
         <a href="/dashboard/rents" class="sidebar-item {{ Request::is('dashboard/rents') ? 'active' : '' }}"

@@ -19,10 +19,6 @@
             @endif
 
             @if (auth()->user()->role_id === 1)
-                <button type="button" class="mb-3 btn button btn-primary" data-bs-toggle="modal"
-                    data-bs-target="#pinjamRuangan">
-                    Pinjam
-                </button>
                 <button type="button" class="mb-3 btn button btn-primary" data-bs-toggle="modal" data-bs-target="#addRoom">
                     Tambah Ruangan
                 </button>
