@@ -56,10 +56,11 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('/daftarpinjam', DashboardRentController::class);
         Route::get('dashboard/rents/{id}/endTransaction', [DashboardRentController::class, 'endTransaction']);
         Route::get('dashboard/users/{id}/makeAdmin', [DashboardUserController::class, 'makeAdmin']);
-        Route::get('dashboard/admin/{id}/removeAdmin', [DashboardAdminController::class, 'removeAdmin']);
+        // Update the method name from 'removeAdmin' to 'demoteToUser'
+        Route::get('dashboard/admin/{id}/demote', [DashboardAdminController::class, 'demoteToUser'])->name('admin.demote'); // Renamed route and method
 
-        });
-        
+    });
+    
     Route::resource('/daftarpinjam', DashboardRentController::class);
     Route::get('/daftarruang', [DaftarRuangController::class, 'index']);
     Route::get('/showruang/{room:code}', [DaftarRuangController::class, 'show']);

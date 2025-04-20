@@ -23,15 +23,15 @@ class LoginController extends Controller
     
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-    
+
             $user = Auth::user();
-            if ($user->role_id === 1) { 
+            if ($user->role_id === 1) {
                 return redirect()->intended('/dashboard/admin');
-            } elseif ($user->role_id === 2) { 
+            } elseif ($user->role_id === 2) { // Represents 'user' role
                 return redirect()->intended('/');
             }
         }
-    
+
         return back()->with('loginError', 'Masukkan Email & Password Dengan Benar');
     }
     

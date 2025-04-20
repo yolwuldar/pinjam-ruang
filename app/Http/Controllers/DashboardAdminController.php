@@ -17,7 +17,8 @@ class DashboardAdminController extends Controller
         return view('dashboard.admin.index', [
             'title' => "Daftar Admin",
             'admins' => User::where('role_id', 1)->get(),
-            'users' => User::where('role_id', '<', 2)->get(),
+            // Fetch users (role_id = 2) instead of users with role < 2
+            'users' => User::where('role_id', 2)->get(),
         ]);
     }
 
@@ -84,25 +85,26 @@ class DashboardAdminController extends Controller
  * @param  \App\Models\User  $user
  * @return \Illuminate\Http\Response
  */
-public function update(Request $request, User $admin)
-{
-    $rules = [
-        'name' => 'required|max:100',
-        'email' => 'required|email',
-    ];
+    public function update(Request $request, User $admin)
+    {
+        $rules = [
+            'name' => 'required|max:100',
+            'email' => 'required|email',
+        ];
 
-    // If the provided nomor_induk is different from the original one, add validation rule
-    if ($request->nomor_induk != $admin->nomor_induk) {
-        $rules['nomor_induk'] = 'required|min:8|unique:users,nomor_induk';
+        // If the provided nomor_induk is different from the original one, add validation rule
+        if ($request->nomor_induk != $admin->nomor_induk) {
+            $rules['nomor_induk'] = 'required|min:8|unique:users,nomor_induk';
+        }
+
+        $validatedData = $request->validate($rules);
+        $validatedData['role_id'] = 1; // Ensure role is admin
+
+        // Update the admin data
+        $admin->update($validatedData);
+
+        return redirect('/dashboard/admin')->with('adminSuccess', 'Data Admin berhasil diubah');
     }
-
-    $validatedData = $request->validate($rules);
-
-    // Update the admin data
-    $admin->update($validatedData);
-
-    return redirect('/dashboard/admin')->with('adminSuccess', 'Data Admin berhasil diubah');
-}
 
     /**
      * Remove the specified resource from storage.
@@ -115,16 +117,17 @@ public function update(Request $request, User $admin)
         $admin->delete();
         return redirect('/dashboard/admin')->with('deleteAdmin', 'Hapus data admin berhasil');
     }
-    
 
-    public function removeAdmin($id)
+
+    public function demoteToUser($id) // Renamed from removeAdmin
     {
-        $adminData = [
-            'role_id' => 1
+        $userData = [
+            'role_id' => 2 // Change role_id to 2 (User)
         ];
 
-        User::where('id', $id)->update($adminData);
+        User::where('id', $id)->update($userData);
 
-        return redirect('/dashboard/admin');
+        // Changed success message
+        return redirect('/dashboard/admin')->with('adminSuccess', 'Role admin berhasil diubah menjadi user');
     }
 }

@@ -16,9 +16,9 @@ class DashboardUserController extends Controller
     public function index()
     {
         return view('dashboard.users.index', [
-            'title' => 'Daftar Mahasiswa',
+            'title' => 'Daftar User', // Changed from 'Daftar Mahasiswa'
             'roles' => Role::all(),
-            'users' => User::where('role_id', 2)->paginate(10),
+            'users' => User::where('role_id', 2)->paginate(10), // Fetches users with role_id 2
         ]);
     }
 
@@ -44,15 +44,16 @@ class DashboardUserController extends Controller
             'name' => 'required|max:100',
             'nomor_induk' => 'required|min:8|unique:users,nomor_induk',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:4', 
-            'role_id' => 'required'
+            'password' => 'required|min:4',
+            'role_id' => 'required' // Ensure role_id is provided, should be 2 for user
         ]);
-    
+
         $validatedData['password'] = bcrypt($validatedData['password']);
-    
+
         try {
             User::create($validatedData);
-            return redirect('/dashboard/users')->with('userSuccess', 'Data mahasiswa berhasil ditambahkan');
+            // Changed success message
+            return redirect('/dashboard/users')->with('userSuccess', 'Data user berhasil ditambahkan');
         } catch (\Exception $e) {
             return redirect('/dashboard/users')->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
@@ -92,20 +93,21 @@ class DashboardUserController extends Controller
         $rules = [
             'name' => 'required|max:100',
             'email' => 'required|email',
-            'role_id' => 'required',
+            'role_id' => 'required', // Should be 2 for user
         ];
-    
+
         // If the provided nomor_induk is different from the original one, add validation rule
         if ($request->nomor_induk != $user->nomor_induk) {
             $rules['nomor_induk'] = 'required|min:8|unique:users,nomor_induk';
         }
-    
+
         $validatedData = $request->validate($rules);
-    
+
         // Update the user data
         $user->update($validatedData);
-    
-        return redirect('/dashboard/users')->with('userSuccess', 'Data mahasiswa berhasil diubah');
+
+        // Changed success message
+        return redirect('/dashboard/users')->with('userSuccess', 'Data user berhasil diubah');
     }
     /**
      * Remove the specified resource from storage.
@@ -116,7 +118,8 @@ class DashboardUserController extends Controller
     public function destroy(User $user)
     {
         User::destroy($user->id);
-        return redirect('/dashboard/users')->with('deleteUser', 'Hapus data mahasiswa berhasil');
+        // Changed success message
+        return redirect('/dashboard/users')->with('deleteUser', 'Hapus data user berhasil');
     }
 
     public function makeAdmin($id)
@@ -127,6 +130,8 @@ class DashboardUserController extends Controller
 
         User::where('id', $id)->update($userData);
 
-        return redirect('/dashboard/admin')->with('adminSuccess', 'Data admin berhasil ditambahkan');
+        // Redirect back to the users list or admin list as appropriate
+        // Changed success message slightly for clarity
+        return redirect('/dashboard/users')->with('userSuccess', 'User berhasil dijadikan admin');
     }
 }
