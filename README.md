@@ -6,7 +6,7 @@
 Vel… vel… vel… Laravel. Suara gaib yang cuma muncul saat kamu mengerjakan tugas **PBO** di tengah malam. Konon, bila ada yang menggunakan framework gajah jahat, makhluk ini datang menusuk-nusuk akal dan kewarasan kalian satu per satu. hunusan pedangnya terdengar seperti kompilasi blade yang gagal: “Vel… vel… Laravel… iiii takunyooooo!”
 Bagikan ke temanmu yang suka main laravel, sebelum mereka didatangi anomali ini!
 ## Preview
-<img src="https://ibb.co.com/TxTmmJRq" style="max-width:100%">
+<img src="anomali laravel.png" style="max-width:100%">
 
 ## Requirement
 - PHP
