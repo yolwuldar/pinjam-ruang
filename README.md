@@ -28,7 +28,7 @@ Bagikan ke temanmu yang suka main laravel, sebelum mereka didatangi anomali ini!
    ```
 2. Navigate to the `app-pinjam-ruang` folder.
    ```sh
-   cd web-pinjam-ruang
+   cd pinjam-ruang
    ```
 3. Install the required components using Composer.
    ```sh
