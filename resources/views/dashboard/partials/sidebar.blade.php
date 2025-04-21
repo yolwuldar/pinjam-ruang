@@ -100,7 +100,16 @@
                 <path d="M12 22.08V12" stroke="#ABB3C4" stroke-width="2" stroke-linecap="round"
                     stroke-linejoin="round" />
             </svg>
-            <span>Konfirmasi Pinjaman</span>
+            
+            <!-- tambah tampilan notifikasi -->
+            <span class="flex items-center gap-1">
+                Konfirmasi Pinjaman
+                @if ($notifCount > 0)
+                <span style="background-color: red; color: white; font-size: 12px; border-radius: 50%; padding: 2px 6px; line-height: 1;">
+                        {{ $notifCount }}
+                    </span>
+                @endif
+            </span>
         </a>
 
         <a href="/dashboard/rents" class="sidebar-item {{ Request::is('dashboard/rents') ? 'active' : '' }}"
