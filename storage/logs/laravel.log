@@ -405,3 +405,12 @@
 #43 C:\\Users\\ASUS\\OneDrive\\Desktop\\tugas pak royan\\pinjam-ruangan\\uts fiks\\pinjam-ruang\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
 #44 {main}
 "} 
+[2025-04-24 19:12:30] local.ERROR: Command "mphp" is not defined. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\CommandNotFoundException(code: 0): Command \"mphp\" is not defined. at F:\\Semester 4\\Mk pak royan\\web-pinjam-ruang-main\\vendor\\symfony\\console\\Application.php:725)
+[stacktrace]
+#0 F:\\Semester 4\\Mk pak royan\\web-pinjam-ruang-main\\vendor\\symfony\\console\\Application.php(262): Symfony\\Component\\Console\\Application->find('mphp')
+#1 F:\\Semester 4\\Mk pak royan\\web-pinjam-ruang-main\\vendor\\symfony\\console\\Application.php(174): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#2 F:\\Semester 4\\Mk pak royan\\web-pinjam-ruang-main\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Application.php(102): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#3 F:\\Semester 4\\Mk pak royan\\web-pinjam-ruang-main\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(155): Illuminate\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#4 F:\\Semester 4\\Mk pak royan\\web-pinjam-ruang-main\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#5 {main}
+"} 
