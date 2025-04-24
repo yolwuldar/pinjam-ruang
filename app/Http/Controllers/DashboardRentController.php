@@ -58,14 +58,20 @@ class DashboardRentController extends Controller
     // }
     public function store(Request $request)
     {
+        $now = now();
+
         $validatedData = $request->validate([
             'room_id' => 'required',
-            'time_start_use' => 'required',
-            'time_end_use' => 'required',
+            'time_start_use' => 'required|date|after_or_equal:' . $now->format('Y-m-d H:i:s'),
+            'time_end_use' => 'required|date|after:time_start_use',
             'purpose' => 'required|max:250',
+        ], [
+            'time_start_use.after_or_equal' => 'Tanggal peminjaman harus sama dengan atau setelah waktu sekarang.',
+            'time_end_use.after' => 'Waktu selesai peminjaman harus setelah waktu mulai peminjaman.'
         ]);
+
         $validatedData['user_id'] = auth()->user()->id;
-        $validatedData['transaction_start'] = now();
+        $validatedData['transaction_start'] = $now;
         $validatedData['status'] = 'pending';
         $validatedData['transaction_end'] = null;
 

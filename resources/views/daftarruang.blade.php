@@ -97,16 +97,32 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row mt-3">
                             <div class="col-md-6">
                                 <label for="time_start" class="form-label">Mulai Pinjam</label>
-                                <input type="datetime-local" class="form-control" id="time_start_use"
-                                    name="time_start_use" value="{{ old('time_start_use') }}" required>
+                                <input type="datetime-local" class="form-control @error('time_start_use') is-invalid @enderror" id="time_start_use"
+                                    name="time_start_use" value="{{ old('time_start_use') }}" required min="{{ date('Y-m-d\TH:i') }}">
+                                @error('time_start_use')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                                @enderror
+                                <div class="invalid-feedback" id="time_start_feedback">
+                                    Waktu mulai pinjam tidak boleh di masa lalu.
+                                </div>
                             </div>
                             <div class="col-md-6">
                                 <label for="time_end" class="form-label">Selesai Pinjam</label>
-                                <input type="datetime-local" class="form-control" id="time_end_use" name="time_end_use"
-                                    value="{{ old('time_end_use') }}" required>
+                                <input type="datetime-local" class="form-control @error('time_end_use') is-invalid @enderror" id="time_end_use"
+                                    name="time_end_use" value="{{ old('time_end_use') }}" required>
+                                @error('time_end_use')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                                @enderror
+                                <div class="invalid-feedback" id="time_end_feedback">
+                                    Waktu selesai pinjam harus setelah waktu mulai pinjam.
+                                </div>
                             </div>
                         </div>
                         <div class="row">
@@ -135,3 +151,75 @@
 </section>
 <!--====== Daftar Ruang ======-->
 @endsection
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const startTimeInput = document.getElementById('time_start_use');
+        const endTimeInput = document.getElementById('time_end_use');
+        const bookingForm = document.querySelector('form[action="/daftarpinjam"]');
+
+        // Set minimum date for start time (today)
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const nowString = `${year}-${month}-${day}T${hours}:${minutes}`;
+
+        startTimeInput.setAttribute('min', nowString);
+
+        // Validation event for start time
+        startTimeInput.addEventListener('change', function() {
+            const startTime = new Date(this.value);
+            const currentTime = new Date();
+
+            if (startTime < currentTime) {
+                this.classList.add('is-invalid');
+                return false;
+            } else {
+                this.classList.remove('is-invalid');
+                // Update minimum for end time when start time changes
+                if (this.value) {
+                    endTimeInput.setAttribute('min', this.value);
+                }
+            }
+        });
+
+        // Validation event for end time
+        endTimeInput.addEventListener('change', function() {
+            const endTime = new Date(this.value);
+            const startTime = new Date(startTimeInput.value);
+
+            if (endTime <= startTime) {
+                this.classList.add('is-invalid');
+                return false;
+            } else {
+                this.classList.remove('is-invalid');
+            }
+        });
+
+        // Form submission validation
+        bookingForm.addEventListener('submit', function(event) {
+            const startTime = new Date(startTimeInput.value);
+            const endTime = new Date(endTimeInput.value);
+            const currentTime = new Date();
+
+            let formValid = true;
+
+            if (startTime < currentTime) {
+                startTimeInput.classList.add('is-invalid');
+                formValid = false;
+            }
+
+            if (endTime <= startTime) {
+                endTimeInput.classList.add('is-invalid');
+                formValid = false;
+            }
+
+            if (!formValid) {
+                event.preventDefault();
+            }
+        });
+    });
+</script>
