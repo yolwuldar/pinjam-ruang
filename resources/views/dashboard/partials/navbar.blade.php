@@ -37,6 +37,7 @@
         <div class="nav-input-group">
             <input type="text" id="searchInput" class="nav-input" placeholder="Search...">
             <button class="btn-nav-input" id="searchButton"><img src="/assets/search.svg" alt=""></button>
+            <button class="btn-nav-clear" id="clearSearchButton" style="display: none;"><i class="bi bi-x-lg"></i></button>
         </div>
 
         @if (auth()->user()->role_id === 1)

@@ -63,6 +63,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             const searchInput = document.getElementById('searchInput');
             const searchButton = document.getElementById('searchButton');
+            const clearSearchButton = document.getElementById('clearSearchButton');
 
             if (searchButton && searchInput) {
                 searchButton.addEventListener('click', function() {
@@ -74,11 +75,30 @@
                         performSearch();
                     }
                 });
+
+                searchInput.addEventListener('input', function() {
+                    // Show the clear button when there's text
+                    clearSearchButton.style.display = searchInput.value ? 'block' : 'none';
+                });
+
+                clearSearchButton.addEventListener('click', function() {
+                    searchInput.value = '';
+                    clearSearch();
+                    clearSearchButton.style.display = 'none';
+                });
             }
 
             function performSearch() {
                 const searchTerm = searchInput.value.toLowerCase().trim();
-                if (!searchTerm) return;
+                if (!searchTerm) {
+                    clearSearch();
+                    return;
+                }
+
+                // Show clear button when search is performed
+                if (clearSearchButton) {
+                    clearSearchButton.style.display = 'block';
+                }
 
                 // Determine current page and search within the appropriate table
                 let currentPath = window.location.pathname;
@@ -155,6 +175,18 @@
                     tbody.appendChild(noResultsRow);
                 }
             }
+
+            function clearSearch() {
+                const rows = document.querySelectorAll('table tbody tr');
+                rows.forEach(row => {
+                    row.style.display = '';
+                });
+
+                // Hide clear button when search is cleared
+                if (clearSearchButton) {
+                    clearSearchButton.style.display = 'none';
+                }
+            }
         });
     </script>
 
@@ -162,6 +194,27 @@
         .search-highlight {
             background-color: rgba(255, 243, 205, 0.5) !important;
             transition: background-color 1s;
+        }
+
+        .btn-nav-clear {
+            position: absolute;
+            right: 60px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #ABB3C4;
+            z-index: 10;
+            padding: 0;
+        }
+
+        .btn-nav-clear:hover {
+            color: #6c757d;
+        }
+
+        .nav-input-group {
+            position: relative;
         }
     </style>
 </body>
