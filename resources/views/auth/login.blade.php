@@ -1,146 +1,35 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <title>{{ $title }} | Universitas Teknokrat Indonesia</title>
-    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Rubik:400,700'>
-    <link rel="stylesheet" href="./style.css">
-
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ $title }} | PIRUTA</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cal+Sans&display=swap" rel="stylesheet">
 </head>
-<style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        -webkit-font-smoothing: antialiased;
-    }
+  <body style="background-color: #f6f1de;" class="d-flex justify-content-center align-items-center vh-100">
 
-    body {
-        background: #2d3b55;
-        font-family: 'Rubik', sans-serif;
-    }
+    <div class="d-flex text-center rounded" style="width: 75%; height: 75%; background-color: #3e3f5b;">
+        <div class="position-relative col-md-6 d-none d-md-block">
+            <img src="/assets/images/login-estetik.png"
+                 class="w-100 h-100"
+                 style="object-fit: cover;"
+                 alt="Gambar Login">
+          
+            <div class="position-absolute top-50 translate-middle-y ps-3 text-start" style="left: 7%">
+                <h1 style="color: #f6f1de !important; font-family: 'Cal Sans'; font-size:100px">Selamat Datang !!</h1>
+            </div>
+            <div class="position-absolute" style="left: 4%; top: 4%">
+                <img src="assets/images/LOGO_ORIGINAL.png" alt="" style="width: 60px; height: 60px;">
+            </div>
+        </div>
 
-    .login-form {
-        background: #fff;
-        width: 500px;
-        margin: 65px auto;
-        display: -webkit-box;
-        display: flex;
-        -webkit-box-orient: vertical;
-        -webkit-box-direction: normal;
-        flex-direction: column;
-        border-radius: 4px;
-        box-shadow: 0 2px 25px rgba(0, 0, 0, 0.2);
-    }
-
-    .login-form h1 {
-        padding: 35px 35px 0 35px;
-        font-weight: 300;
-    }
-
-    .login-form .content {
-        padding: 35px;
-        text-align: center;
-    }
-
-    .login-form .input-field {
-        padding: 12px 5px;
-    }
-
-    .login-form .input-field input {
-        font-size: 16px;
-        display: block;
-        font-family: 'Rubik', sans-serif;
-        width: 100%;
-        padding: 10px 1px;
-        border: 0;
-        border-bottom: 1px solid #747474;
-        outline: none;
-        -webkit-transition: all .2s;
-        transition: all .2s;
-    }
-
-    .login-form .input-field input::-webkit-input-placeholder {
-        text-transform: uppercase;
-    }
-
-    .login-form .input-field input::-moz-placeholder {
-        text-transform: uppercase;
-    }
-
-    .login-form .input-field input:-ms-input-placeholder {
-        text-transform: uppercase;
-    }
-
-    .login-form .input-field input::-ms-input-placeholder {
-        text-transform: uppercase;
-    }
-
-    .login-form .input-field input::placeholder {
-        text-transform: uppercase;
-    }
-
-    .login-form .input-field input:focus {
-        border-color: #222;
-    }
-
-    .login-form a.link {
-        text-decoration: none;
-        color: #747474;
-        letter-spacing: 0.2px;
-        text-transform: uppercase;
-        display: inline-block;
-        margin-top: 20px;
-    }
-
-    .login-form .action {
-        display: -webkit-box;
-        display: flex;
-        -webkit-box-orient: horizontal;
-        -webkit-box-direction: normal;
-        flex-direction: row;
-    }
-
-    .login-form .action button {
-        width: 100%;
-        border: none;
-        padding: 18px;
-        font-family: 'Rubik', sans-serif;
-        cursor: pointer;
-        text-transform: uppercase;
-        background: #e8e9ec;
-        color: #777;
-        border-bottom-left-radius: 4px;
-        border-bottom-right-radius: 0;
-        letter-spacing: 0.2px;
-        outline: 0;
-        -webkit-transition: all .3s;
-        transition: all .3s;
-    }
-
-    .login-form .action button:hover {
-        background: #d8d8d8;
-    }
-
-    .login-form .action button:nth-child(2) {
-        background: #2d3b55;
-        color: #fff;
-        border-bottom-left-radius: 0;
-        border-bottom-right-radius: 4px;
-    }
-
-    .login-form .action button:nth-child(2):hover {
-        background: #3c4d6d;
-    }
-</style>
-
-<body>
-    <div class="login-form">
-        <form action="/login" method="post" class="form-input">
-            @csrf
-            <h1>Login</h1>
-            <div class="content">
+        <div class="col-md-6 d-flex align-items-center justify-content-center flex-column">
+            <h2 style="color: #f6f1de !important; font-family: 'Cal Sans'; margin-bottom: 20px;">Log In</h2>
+            <form action="/login" method="post" style="width: 75%;">
+                @csrf
                 @if (session()->has('loginError'))
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
                         {{ session('loginError') }}
@@ -148,55 +37,37 @@
                     </div>
                 @endif
                 @if (session()->has('regisSuccess'))
-                    <div class="col-md-16 mx-auto alert alert-success text-center  alert-success alert-dismissible fade show"
+                    <div class="col-md-16 mx-auto alert alert-success text-center alert-dismissible fade show"
                         style="margin-top: 50px" role="alert">
                         {{ session('regisSuccess') }}
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 @endif
-                <div class="input-field">
-                    <input class="input-field border-0" type="email" required
-                        placeholder="Your Email Address @error('email') is-invalid @enderror"
-                        value="{{ old('email') }}" class="input-form" name="email" id="floatingInput" autofocus
-                        autocomplete="off" />
+                <div class="mb-3 text-start">
+                    <label for="email" class="form-label" style="color: #f6f1de">Email address</label>
+                    <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" placeholder="Masukan email" value="{{ old('email') }}" style="height: 50px;" required>
+                    <div id="emailHelp" class="form-text" style="color: #f6f1de">We'll never share your email with anyone else.</div>
                     @error('email')
                         <div class="invalid-feedback" style="display: block">
                             {{ $message }}
                         </div>
                     @enderror
                 </div>
-                <div class="input-field">
-                    <input type="password" class="input-field border-0" required
-                        placeholder="Your Password @error('password') is-invalid @enderror"
-                        value="{{ old('password') }}" name="password" id="password-content-4-1" />
+                <div class="mb-3 text-start">
+                    <label for="password" class="form-label" style="color: #f6f1de">Password</label>
+                    <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" placeholder="Masukan password" style="height: 50px;" required>
                     @error('password')
                         <div class="invalid-feedback" style="display: block">
                             {{ $message }}
                         </div>
                     @enderror
                 </div>
-                <a href="#" class="link">Forgot Your Password?</a>
-            </div>
-            <div class="action">
-                <a href="/register">
-                    <button type="button">Register</button>
-                </a>
-                <button type="submit">
-                    Log In
-                </button>
-            </div>
-        </form>
+                <button type="submit" class="btn w-100" style="background-color: #8ab2a6; height: 50px; font-family: 'Cal Sans'; color: #f6f1de">LOGIN</button>
+                
+            </form>
+        </div>
     </div>
-    <script src="./script.js"></script>
 
-</body>
-<script>
-    let form = document.querySelecter('form');
-
-    form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        return false;
-    });
-</script>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script>
+  </body>
 </html>
