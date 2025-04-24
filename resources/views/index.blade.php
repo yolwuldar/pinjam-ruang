@@ -22,10 +22,10 @@
             <div class="row align-items-center">
                 <div class="col-xl-5 offset-xl-7 col-lg-8 offset-lg-2 col-md-10 offset-md-1">
                     <div class="hero-content">
-                        <h2 class="mb-30 wow fadeInUp" data-wow-delay=".2s">Sistem Peminjaman Ruangan
+                        <h2 class="mb-30 wow fadeInUp" data-wow-delay=".2s">Pinjam Ruang UNTIRTA
                         </h2>
-                        <p class="wow fadeInUp" data-wow-delay=".4s">Selamat datang di Website Peminjaman Ruang Terbaik di
-                            Universitas Teknokrat Indonesia. Temukan, pesan, dan gunakan ruang kampus dengan mudah</p>
+                        <p class="wow fadeInUp" data-wow-delay=".4s">Website Peminjaman Ruang Fakultas Teknik
+                            UNTIRTA. Aplikasi untuk meminjam ruangan, melihat jadwal peminjaman, dan membantu menggunakan ruang kampus dengan mudah</p>
                         <div class="hero-btns">
                             <a href="/daftarruang" class="main-btn wow fadeInUp" data-wow-delay=".6s">Pinjam</a>
                         </div>
