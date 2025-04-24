@@ -16,7 +16,7 @@ class Room extends Model
         return $this->belongsTo(Building::class);
     }
 
-    public function room()
+    public function rents()
     {
         return $this->hasMany(Rent::class);
     }
