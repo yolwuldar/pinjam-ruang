@@ -129,6 +129,59 @@ class DashboardRentController extends Controller
     }
 
     /**
+     * Export the rents listing to CSV.
+     *
+     * @return \Symfony\Component\HttpFoundation\StreamedResponse
+     */
+    public function export()
+    {
+        $filename = 'peminjaman_ruangan_' . date('Y-m-d_H-i-s') . '.csv';
+
+        $rents = Rent::with(['room', 'user'])->latest()->get();
+
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => "attachment; filename=\"$filename\"",
+        ];
+
+        $callback = function () use ($rents) {
+            $file = fopen('php://output', 'w');
+
+            // Add CSV header
+            fputcsv($file, [
+                'No.',
+                'Kode Ruangan',
+                'Nama Peminjam',
+                'Mulai Pinjam',
+                'Selesai Pinjam',
+                'Tujuan',
+                'Waktu Transaksi',
+                'Waktu Pengembalian',
+                'Status Pinjam'
+            ]);
+
+            // Add data rows
+            foreach ($rents as $index => $rent) {
+                fputcsv($file, [
+                    $index + 1,
+                    $rent->room->code,
+                    $rent->user->name,
+                    $rent->time_start_use,
+                    $rent->time_end_use,
+                    $rent->purpose,
+                    $rent->transaction_start,
+                    $rent->transaction_end ?? '-',
+                    $rent->status
+                ]);
+            }
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
+    }
+
+    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request

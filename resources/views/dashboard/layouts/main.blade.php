@@ -59,38 +59,111 @@
 
         }
 
+        // Search functionality
         document.addEventListener('DOMContentLoaded', function() {
-            var nameInput = document.getElementById('name');
-            var sisaMinSpan = document.getElementById('sisaMin');
+            const searchInput = document.getElementById('searchInput');
+            const searchButton = document.getElementById('searchButton');
 
-            nameInput.addEventListener('input', function() {
-                var inputValue = nameInput.value.length;
-                var minCharacter = 4;
+            if (searchButton && searchInput) {
+                searchButton.addEventListener('click', function() {
+                    performSearch();
+                });
 
-                // Update sisaMinSpan
-                sisaMinSpan.textContent = Math.max(0, minCharacter - inputValue);
+                searchInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        performSearch();
+                    }
+                });
+            }
 
-                // Tampilkan notifikasi jika kurang dari 4 karakter
-                if (inputValue < minCharacter) {
-                    showNotification('Nama Lengkap harus memiliki setidaknya 4 karakter.');
+            function performSearch() {
+                const searchTerm = searchInput.value.toLowerCase().trim();
+                if (!searchTerm) return;
+
+                // Determine current page and search within the appropriate table
+                let currentPath = window.location.pathname;
+                let tableRows;
+
+                if (currentPath.includes('/dashboard/admin')) {
+                    // Search in admin table
+                    tableRows = document.querySelectorAll('table tbody tr');
+                    searchInTable(tableRows, searchTerm, [1]); // Search in name column
+                } else if (currentPath.includes('/dashboard/users')) {
+                    // Search in users table
+                    tableRows = document.querySelectorAll('table tbody tr');
+                    searchInTable(tableRows, searchTerm, [1, 2]); // Search in name and email columns
+                } else if (currentPath.includes('/dashboard/rooms')) {
+                    // Search in rooms table
+                    tableRows = document.querySelectorAll('table tbody tr');
+                    searchInTable(tableRows, searchTerm, [1, 2]); // Search in code and name columns
+                } else if (currentPath.includes('/dashboard/temporaryRents')) {
+                    // Search in temporary rents table
+                    tableRows = document.querySelectorAll('table tbody tr');
+                    searchInTable(tableRows, searchTerm, [1, 2, 5]); // Search in room code, user name, and purpose columns
+                } else if (currentPath.includes('/dashboard/rents')) {
+                    // Search in rents table
+                    tableRows = document.querySelectorAll('table tbody tr');
+                    searchInTable(tableRows, searchTerm, [1, 2, 5]); // Search in room code, user name, and purpose columns
                 }
-            });
+            }
 
-            // Fungsi untuk menampilkan notifikasi
-            function showNotification(message) {
-                var notification = document.createElement('div');
-                notification.className = 'alert alert-danger alert-dismissible fade show';
-                notification.innerHTML = message +
-                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
-                document.body.appendChild(notification);
+            function searchInTable(rows, searchTerm, columnIndexes) {
+                let matchCount = 0;
 
-                // Menghilangkan notifikasi setelah beberapa detik (misalnya, 3 detik)
-                setTimeout(function() {
-                    notification.style.display = 'none';
-                }, 3000);
+                rows.forEach(row => {
+                    let found = false;
+
+                    columnIndexes.forEach(index => {
+                        const cell = row.cells[index];
+                        if (cell && cell.textContent.toLowerCase().includes(searchTerm)) {
+                            found = true;
+                        }
+                    });
+
+                    if (found) {
+                        row.style.display = '';
+                        row.classList.add('search-highlight');
+                        setTimeout(() => {
+                            row.classList.remove('search-highlight');
+                        }, 2000);
+                        matchCount++;
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+
+                // Show/hide "no results" message
+                const noResultsRow = document.querySelector('.no-search-results');
+                if (noResultsRow) {
+                    noResultsRow.remove();
+                }
+
+                if (matchCount === 0 && rows.length > 0) {
+                    const table = rows[0].closest('table');
+                    const tbody = table.querySelector('tbody');
+                    const colCount = table.querySelector('tr').cells.length;
+
+                    const noResultsRow = document.createElement('tr');
+                    noResultsRow.className = 'no-search-results';
+
+                    const noResultsCell = document.createElement('td');
+                    noResultsCell.colSpan = colCount;
+                    noResultsCell.textContent = `Tidak ada hasil untuk '${searchTerm}'`;
+                    noResultsCell.className = 'text-center';
+
+                    noResultsRow.appendChild(noResultsCell);
+                    tbody.appendChild(noResultsRow);
+                }
             }
         });
     </script>
+
+    <style>
+        .search-highlight {
+            background-color: rgba(255, 243, 205, 0.5) !important;
+            transition: background-color 1s;
+        }
+    </style>
 </body>
 
 </html>
