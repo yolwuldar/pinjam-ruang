@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Role;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 
 class DashboardUserController extends Controller
@@ -134,4 +135,38 @@ class DashboardUserController extends Controller
         // Changed success message slightly for clarity
         return redirect('/dashboard/users')->with('userSuccess', 'User berhasil dijadikan admin');
     }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'csv_file' => 'required|file|mimes:csv,txt'
+        ]);
+    
+        $file = $request->file('csv_file');
+        $data = array_map('str_getcsv', file($file));
+    
+        $imported = 0;
+        foreach ($data as $index => $row) {
+            if ($index === 0) continue; // Lewati baris header
+    
+            // Cek apakah email atau nomor induk sudah ada
+            if (User::where('email', $row[2])->exists() || User::where('nomor_induk', $row[1])->exists()) {
+                continue; // Lewati data duplikat
+            }
+    
+            User::create([
+                'name'         => $row[0],
+                'nomor_induk'  => $row[1],
+                'email'        => $row[2],
+                'password'     => Hash::make($row[3] ?? 'password123'), // default jika tidak ada
+                'role_id'      => 2, // role mahasiswa
+            ]);
+    
+            $imported++;
+        }
+    
+        return redirect('/dashboard/users')->with('userSuccess', "Import selesai. $imported data berhasil ditambahkan.");
+    }
+    
+
 }

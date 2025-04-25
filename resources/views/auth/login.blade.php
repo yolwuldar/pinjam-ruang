@@ -46,7 +46,6 @@
                 <div class="mb-3 text-start">
                     <label for="email" class="form-label" style="color: #f6f1de">Email address</label>
                     <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" placeholder="Masukan email" value="{{ old('email') }}" style="height: 50px;" required>
-                    <div id="emailHelp" class="form-text" style="color: #f6f1de">We'll never share your email with anyone else.</div>
                     @error('email')
                         <div class="invalid-feedback" style="display: block">
                             {{ $message }}

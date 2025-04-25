@@ -27,6 +27,17 @@
                 <div class="d-flex justify-content-start">
                     {{ $users->links() }}
                 </div>
+                {{-- Tombol Import CSV --}}
+@if (auth()->user()->role_id === 1)
+    <form action="{{ route('users.import') }}" method="POST" enctype="multipart/form-data" class="mb-4 mt-2 text-start">
+        @csrf
+        <label for="csv_file" class="form-label">Import Data Mahasiswa</label>
+        <div class="input-group">
+            <input type="file" name="csv_file" id="csv_file" class="form-control" required>
+            <button type="submit" class="btn btn-success">Import CSV</button>
+        </div>
+    </form>
+@endif
 
                 <table class="table table-hover table-stripped table-bordered text-center">
                     <thead class="table-info">

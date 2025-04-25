@@ -59,6 +59,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('dashboard/users/{id}/makeAdmin', [DashboardUserController::class, 'makeAdmin']);
         // Update the method name from 'removeAdmin' to 'demoteToUser'
         Route::get('dashboard/admin/{id}/demote', [DashboardAdminController::class, 'demoteToUser'])->name('admin.demote'); // Renamed route and method
+        Route::post('/dashboard/users/import', [DashboardUserController::class, 'import'])->name('users.import');
 
     });
 
