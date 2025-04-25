@@ -50,23 +50,21 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/dashboard/temporaryRents/{id}/acceptRents', [TemporaryRentController::class, 'acceptRents']);
         Route::get('/dashboard/temporaryRents/{id}/declineRents', [TemporaryRentController::class, 'declineRents']);
         Route::resource('dashboard/rents', DashboardRentController::class);
+        Route::get('dashboard/rents-export', [DashboardRentController::class, 'export'])->name('rents.export');
+        Route::get('dashboard/rents/{id}/endTransaction', [DashboardRentController::class, 'endTransaction']);
         Route::resource('dashboard/rooms', DashboardRoomController::class);
         Route::resource('dashboard/users', DashboardUserController::class);
         Route::resource('dashboard/admin', DashboardAdminController::class);
         Route::resource('/daftarpinjam', DashboardRentController::class);
-        Route::get('dashboard/rents/{id}/endTransaction', [DashboardRentController::class, 'endTransaction']);
         Route::get('dashboard/users/{id}/makeAdmin', [DashboardUserController::class, 'makeAdmin']);
         // Update the method name from 'removeAdmin' to 'demoteToUser'
         Route::get('dashboard/admin/{id}/demote', [DashboardAdminController::class, 'demoteToUser'])->name('admin.demote'); // Renamed route and method
 
     });
-    
+
     Route::resource('/daftarpinjam', DashboardRentController::class);
     Route::get('/daftarruang', [DaftarRuangController::class, 'index']);
     Route::get('/showruang/{room:code}', [DaftarRuangController::class, 'show']);
     Route::get('/daftarpinjam', [DaftarPinjamController::class, 'index']);
     Route::post('/logout', [LoginController::class, 'logout']);
-
 });
-
-
