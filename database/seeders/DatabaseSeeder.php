@@ -40,7 +40,7 @@ class DatabaseSeeder extends Seeder
 
         User::create([
             'name' => 'Admin',
-            'email' => 'admin@gmail.com',
+            'email' => 'admin@untirta.ac.id',
             'password' => bcrypt('admin'),
             'nomor_induk' => '21312131',
             'role_id' => 1,
@@ -48,7 +48,7 @@ class DatabaseSeeder extends Seeder
 
         User::create([
             'name' => 'User', // Changed from 'Mahasiswa'
-            'email' => 'user@gmail.com', // Changed from 'mahasiswa@gmail.com'
+            'email' => 'user@untirta.ac.id', // Changed from 'mahasiswa@gmail.com'
             'password' => bcrypt('user'), // Changed from 'mahasiswa'
             'nomor_induk' => '21312109',
             'role_id' => 2,

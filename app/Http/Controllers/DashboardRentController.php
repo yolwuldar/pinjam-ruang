@@ -58,14 +58,20 @@ class DashboardRentController extends Controller
     // }
     public function store(Request $request)
     {
+        $now = now();
+
         $validatedData = $request->validate([
             'room_id' => 'required',
-            'time_start_use' => 'required',
-            'time_end_use' => 'required',
+            'time_start_use' => 'required|date|after_or_equal:' . $now->format('Y-m-d H:i:s'),
+            'time_end_use' => 'required|date|after:time_start_use',
             'purpose' => 'required|max:250',
+        ], [
+            'time_start_use.after_or_equal' => 'Tanggal peminjaman harus sama dengan atau setelah waktu sekarang.',
+            'time_end_use.after' => 'Waktu selesai peminjaman harus setelah waktu mulai peminjaman.'
         ]);
+
         $validatedData['user_id'] = auth()->user()->id;
-        $validatedData['transaction_start'] = now();
+        $validatedData['transaction_start'] = $now;
         $validatedData['status'] = 'pending';
         $validatedData['transaction_end'] = null;
 
@@ -126,6 +132,59 @@ class DashboardRentController extends Controller
     {
         Rent::destroy($rent->id);
         return redirect('/dashboard/rents')->with('deleteRent', 'Data peminjaman berhasil dihapus');
+    }
+
+    /**
+     * Export the rents listing to CSV.
+     *
+     * @return \Symfony\Component\HttpFoundation\StreamedResponse
+     */
+    public function export()
+    {
+        $filename = 'peminjaman_ruangan_' . date('Y-m-d_H-i-s') . '.csv';
+
+        $rents = Rent::with(['room', 'user'])->latest()->get();
+
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => "attachment; filename=\"$filename\"",
+        ];
+
+        $callback = function () use ($rents) {
+            $file = fopen('php://output', 'w');
+
+            // Add CSV header
+            fputcsv($file, [
+                'No.',
+                'Kode Ruangan',
+                'Nama Peminjam',
+                'Mulai Pinjam',
+                'Selesai Pinjam',
+                'Tujuan',
+                'Waktu Transaksi',
+                'Waktu Pengembalian',
+                'Status Pinjam'
+            ]);
+
+            // Add data rows
+            foreach ($rents as $index => $rent) {
+                fputcsv($file, [
+                    $index + 1,
+                    $rent->room->code,
+                    $rent->user->name,
+                    $rent->time_start_use,
+                    $rent->time_end_use,
+                    $rent->purpose,
+                    $rent->transaction_start,
+                    $rent->transaction_end ?? '-',
+                    $rent->status
+                ]);
+            }
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
     }
 
     /**

@@ -16,15 +16,15 @@ class APIRentController extends Controller
      */
     public function index()
     {
-        $userRent=Rent::orderBy('created_at', 'desc')->get();
-        $rooms=Room::all();
+        $userRent = Rent::orderBy('created_at', 'desc')->get();
+        $rooms = Room::all();
         return response()->json([
-            'status'=>true,
-            'message'=>'Get Data Sukses',
-            'data'=>[
+            'status' => true,
+            'message' => 'Get Data Sukses',
+            'data' => [
                 $userRent
             ]
-        ],200);
+        ], 200);
     }
 
     /**
@@ -35,23 +35,29 @@ class APIRentController extends Controller
      */
     public function store(Request $request)
     {
+        $now = now();
+
         $validatedData = $request->validate([
-        'room_id' => 'required',
-        'user_id' => 'required',
-        'time_start_use' => 'required|date',
-        'time_end_use' => 'required|date',
-        'purpose' => 'required|max:250',
+            'room_id' => 'required',
+            'user_id' => 'required',
+            'time_start_use' => 'required|date|after_or_equal:' . $now->format('Y-m-d H:i:s'),
+            'time_end_use' => 'required|date|after:time_start_use',
+            'purpose' => 'required|max:250',
+        ], [
+            'time_start_use.after_or_equal' => 'Tanggal peminjaman harus sama dengan atau setelah waktu sekarang.',
+            'time_end_use.after' => 'Waktu selesai peminjaman harus setelah waktu mulai peminjaman.'
         ]);
-        $validatedData['transaction_start'] = now();
+
+        $validatedData['transaction_start'] = $now;
         $validatedData['status'] = 'pending';
-        $validatedData['transaction_end'] = null; 
+        $validatedData['transaction_end'] = null;
 
         $rent = Rent::create($validatedData);
         return response()->json([
-            'status'=>true,
-            'message'=>'Create Data Sukses',
-            'data'=>$rent    
-        ],201);
+            'status' => true,
+            'message' => 'Create Data Sukses',
+            'data' => $rent
+        ], 201);
     }
 
     /**
@@ -63,16 +69,16 @@ class APIRentController extends Controller
     public function show($id)
     {
         $showRent = Rent::find($id);
-        if($showRent){
+        if ($showRent) {
             return response()->json([
-            'status'=>true,
-            'message'=>'Get Detail Data Sukses',
-            'data'=>$showRent
-        ],200);
-        }else{
+                'status' => true,
+                'message' => 'Get Detail Data Sukses',
+                'data' => $showRent
+            ], 200);
+        } else {
             return response()->json([
-                'status'=>false,
-                'message'=>'Get Detail Data Gagal'
+                'status' => false,
+                'message' => 'Get Detail Data Gagal'
             ]);
         }
     }
@@ -84,8 +90,10 @@ class APIRentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-   public function update(Request $request, $id)
+    public function update(Request $request, $id)
     {
+        $now = now();
+
         $findRent = Rent::find($id);
         if (empty($findRent)) {
             return response()->json([
@@ -96,12 +104,15 @@ class APIRentController extends Controller
         $validatedData = $request->validate([
             'room_id' => 'required',
             'user_id' => 'required',
-            'time_start_use' => 'required|date',
-            'time_end_use' => 'required|date',
+            'time_start_use' => 'required|date|after_or_equal:' . $now->format('Y-m-d H:i:s'),
+            'time_end_use' => 'required|date|after:time_start_use',
             'purpose' => 'required|max:250',
+        ], [
+            'time_start_use.after_or_equal' => 'Tanggal peminjaman harus sama dengan atau setelah waktu sekarang.',
+            'time_end_use.after' => 'Waktu selesai peminjaman harus setelah waktu mulai peminjaman.'
         ]);
 
-        $validatedData['transaction_start'] = now();
+        $validatedData['transaction_start'] = $now;
         $validatedData['status'] = 'pending';
         $validatedData['transaction_end'] = null;
 
@@ -129,7 +140,7 @@ class APIRentController extends Controller
                 'message' => 'Data Tidak Ditemukan'
             ], 404);
         }
-        
+
         $findRent->delete();
         return response()->json([
             'status' => true,
