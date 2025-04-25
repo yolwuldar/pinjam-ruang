@@ -14,6 +14,11 @@ class DaftarPinjamController extends Controller
             'userRents' => Rent::where('user_id', auth()->user()->id)->latest()->paginate(5),
             'title' => "Daftar Pinjam",
             'rooms' => Room::all(),
+            
+            // Tambahkan variabel untuk kalender
+            'calendarEvents' => Rent::with(['room', 'user'])
+                                  ->whereIn('status', ['disetujui', 'dipinjam'])
+                                  ->get()
         ]);
     }
 }
