@@ -2,6 +2,8 @@
 /public/hot
 /public/storage
 /vendor
+storage/*.key
+storage/logs/laravel.log
 .env
 .env.backup
 .phpunit.result.cache
